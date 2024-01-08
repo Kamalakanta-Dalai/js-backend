@@ -6,10 +6,24 @@ dotenv.config({
   path: "./env",
 });
 
-connectDB();
+connectDB() //? connectDB being a async method always returns a promise
+  .then(() => {
+    app.on((error) => {
+      console.log("ERROR: App not able to talk to DB ", error);
+      throw error;
+    });
+
+    app.listen(process.env.PORT || 8080, () => {
+      console.log(`Server is running on PORT:${process.env.PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log("mongoDB connection failed !! ", error);
+  });
 
 import express from "express";
 const app = express();
+
 //? One way of writting code to connect to DB
 // function connectDB() {} //!Function declaration
 // connectDB(); //!Function call
@@ -34,7 +48,3 @@ const app = express();
   }
 )();   //TODO Approach-2 : Professionally we have to do all the above things inside DB folder connecting to DB and hadling errors
 */
-
-// app.listen(process.env.PORT, () => {
-//   console.log(`App is listenig on on PORT ${process.env.PORT}`);
-// });
