@@ -2,7 +2,7 @@ class ApiError extends Error {
   constructor(
     statusCode,
     message = "Somethng went wrong",
-    error = [],
+    errors = [],
     statck = ""
   ) {
     super(message);
@@ -19,5 +19,4 @@ class ApiError extends Error {
   }
 }
 
-export {};
-ApiError;
+export { ApiError };
