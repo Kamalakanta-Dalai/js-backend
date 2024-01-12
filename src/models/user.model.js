@@ -57,6 +57,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
+  //? methods hook here provides the feature of creating a customized method
   //here the parameter 'password' is the password given by the user while validating during login
   return await bcrypt.compare(password, this.password);
 };

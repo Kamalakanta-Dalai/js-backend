@@ -8,7 +8,7 @@ dotenv.config({
 
 connectDB() //? connectDB being a async method always returns a promise
   .then(() => {
-    app.on((error) => {
+    app.on("error", () => {
       console.log("ERROR: App not able to talk to DB ", error);
       throw error;
     });
