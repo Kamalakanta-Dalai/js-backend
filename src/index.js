@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-
+import { app } from "./app.js";
 import connectDB from "./db/index.js";
 
 dotenv.config({
@@ -20,9 +20,6 @@ connectDB() //? connectDB being a async method always returns a promise
   .catch((error) => {
     console.log("mongoDB connection failed !! ", error);
   });
-
-import express from "express";
-const app = express();
 
 //? One way of writting code to connect to DB
 // function connectDB() {} //!Function declaration
