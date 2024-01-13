@@ -23,7 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   //TODO: check if user already registered or not: can be done via username & email
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ email }, { username }], //? MongoDB query to perform logical OR operation
   });
 
@@ -36,7 +36,16 @@ const registerUser = asyncHandler(async (req, res) => {
 
   //TODO: check for images,check for avatar(whether user has send it or not)
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  //const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+  let coverImageLocalPath;
+  if (
+    req.files &&
+    Array.isArray(req.files.coverImage) &&
+    req.files.coverImage.length > 0
+  ) {
+    coverImageLocalPath = req.files.coverImage[0].path;
+  }
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required!");
@@ -78,10 +87,9 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   //TODO: return response
-  return (
-    res.status(201),
-    json(new ApiResponse(200, createdUser, "User Registered Successfully"))
-  );
+  return res
+    .status(201)
+    .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
 });
 
 export { registerUser };
