@@ -1,8 +1,9 @@
 import { User } from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
 
-//? In production grade code sometimes the req isn't used we can simply just replace res with '_'
+//? In production grade code sometimes the res isn't used we can simply just replace res with '_'
 export const verifyJWT = asyncHandler(async (req, _, next) => {
   try {
     const token =

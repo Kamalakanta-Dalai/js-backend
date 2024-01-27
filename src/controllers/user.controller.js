@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const generateAccessAndRefrshTokens = async (userId) => {
   try {
@@ -178,8 +179,12 @@ const logoutUser = asyncHandler(async (req, res) => {
     req.user._id,
     {
       $set: {
-        refreshToken: undefined,
+        refreshToken: undefined, // If doesn't work properly use "null" instead "undefined"
       },
+      //? Alternative way of removing refreshToken
+      // $unset:{
+      //   refreshToken:1
+      // }
     },
     {
       new: true,
@@ -198,6 +203,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User Loggedout Successfuly"));
 });
 
+//TODO: Refresh Access Token
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
@@ -403,7 +409,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         },
         isSubscribed: {
           $cond: {
-            if: { $in: [req.user?._id, "subscribers.subscriber"] },
+            if: { $in: [req.user?._id, "$subscribers.subscriber"] },
             then: true,
             else: false,
           },
